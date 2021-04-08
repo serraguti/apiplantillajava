@@ -47,4 +47,12 @@ public class ServicePlantilla {
     public Funciones getFunciones() throws SQLException {
         return this.repo.getFunciones();
     }
+
+    @GET
+    @Path("buscarsalario/{salario}")
+    @Produces(MediaType.APPLICATION_XML)
+    public List<Plantilla> getPlantillaSalario(@PathParam("salario") String salario) throws SQLException {
+        int sal = Integer.parseInt(salario);
+        return this.repo.getPlantillaSalario(sal);
+    }
 }

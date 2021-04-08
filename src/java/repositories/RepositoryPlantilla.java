@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 import models.Funciones;
 import models.Plantilla;
 
@@ -107,5 +106,30 @@ public class RepositoryPlantilla {
         cn.close();
         funciones.setFuncion(datos);
         return funciones;
+    }
+
+    public List<Plantilla> getPlantillaSalario(int salario) throws SQLException {
+        Connection cn = this.getConnection();
+        String sql = "select * from plantilla where salario > ?";
+        PreparedStatement pst = cn.prepareStatement(sql);
+        pst.setInt(1, salario);
+        ResultSet rs = pst.executeQuery();
+        ArrayList<Plantilla> plantillas = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("EMPLEADO_NO");
+            String ape = rs.getString("APELLIDO");
+            String fun = rs.getString("FUNCION");
+            String t = rs.getString("T");
+            int sal = rs.getInt("SALARIO");
+            Plantilla p = new Plantilla(id, ape, fun, t, sal);
+            plantillas.add(p);
+        }
+        rs.close();
+        cn.close();
+        if (plantillas.isEmpty()) {
+            return null;
+        } else {
+            return plantillas;
+        }
     }
 }
